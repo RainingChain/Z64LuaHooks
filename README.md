@@ -1,32 +1,49 @@
 Zelda Framework
 ==============
 
-This framework is meant to provide support for mods for the original Ocarina of Time ROM.
-It is meant to work with no setup.
-This means it must require no external dependencies other than the project .lua files, the unmodified ROM and unmodified Bizhawk emulator.
+This framework provides support for mods for Ocarina of Time JP 1.0.
 
-Goal:
-	-Provide event support. Ex: Utils.onButtonPress
-	-Provide read/write addresses support by id. Ex: Addr.getById("Amount.Bomb").set(10) 
-	-Provide Enum. Ex: CST.ACTOR_TYPE.Bomb == 0x0010
-	-Provide Actor RAM map. Ex: Actor.new(pointerToBomb).x.set(10)
-	-Provide modular Mod support. Ex: See /Mods folder.
+It is meant to work right out of the box.
 
-How to use:
-	-Open Bizhawk and load the ROM.
-	-Open the Lua Console via Tools->Lua Console
-	-Open the script "main.lua"
-	-Click to checkbox to apply thee mods you want.
-	-NOTICE: Always close the Mod Window before closing the Lua Console.
+This means it must require no external dependencies other than the project .lua files, the unmodified JP 1.0 ROM and unmodified [Bizhawk emulator](http://tasvideos.org/BizHawk.html).
+
+####Goal:
+- Provide event support. Ex: `Utils.onButtonPress`
+- Provide read/write addresses support by id. Ex: `Addr.getById("Amount.Bomb").set(10) `
+- Provide Enum. Ex: `CST.ACTOR_TYPE.Bomb == 0x0010`
+- Provide Actor RAM map. Ex: `Actor.new(pointerToBomb).x.set(10)`
+- Provide modular Mod support. Ex: See `/Mods` folder.
+
+####How to use:
+- Open Bizhawk and load the ROM.
+- Open the Lua Console via Tools->Lua Console
+- Open the script `main.lua`
+- Click to checkbox to apply thee mods you want.
+- NOTICE: Always close the Mod Window before closing the Lua Console.
 	
-How to contribute:
-	-Extend the Actor RAM map in Actor.lua.
-	-Add Enums in CST.
-	-Add new addresses in Addr_JP_10.wch via Tools->RAM Watch
-	-Create new mods following examples in /Mods
+####How to contribute:
+- Extend the Actor RAM map in `Actor.lua`.
+- Add Enums in `Cst.lua`.
+- Add new addresses in `Addr_JP_10.wch` via Tools->RAM Watch
+- Create new mods following examples in `/Mods`.
 
-	
-Utils
+
+####Mods made so far:
+- Change Name
+- Bomb Tornado (Causes bombs to loop in circles around you)
+- Display Bomb	(Display all bombs x,y,z,timer and address)
+- Press L to levitate
+- Change Tunic Hex Color (Modifies ROM)
+
+[Mods Display Video](https://www.youtube.com/watch?v=kUZ-sWL7h0Q)
+
+
+
+
+#### API
+
+######Utils
+
 	static
 		string charAt(number pos)		
 		void onButtonPress(string id, CST.INPUT input, Function func)
@@ -48,7 +65,8 @@ Utils
 			Return path to folder containing "main.lua"
 		
 	
-Addr
+######Addr
+
 	On initialization, every address in the file "Addr_JP_10.wch" will create its corresponding Addr accessible via Addr.getById(id).
 
 	constructor(number address,Addr.SIZE size,Addr.TYPE type,string id)
@@ -62,7 +80,8 @@ Addr
 		Addr getById(string id)
 		
 		
-Mod
+######Mod
+
 	constructor(string id,string name,Function onActivate,[Function onDeactivate])
 	
 	instance
@@ -76,7 +95,8 @@ Mod
 		void openMainForm()
 		
 		
-Actor
+######Actor
+
 	constructor(number address)
 		
 	instance

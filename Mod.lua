@@ -59,7 +59,7 @@ end
 
 
 Mod.openMainForm = function()	
-	local form = forms.newform(400,400,"Mods",function()
+	local form = forms.newform(300,300,"Mods",function()
 		for key,m in pairs(Mod.LIST) do
 			m.deactivate()
 		end
