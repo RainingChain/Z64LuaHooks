@@ -25,6 +25,8 @@ This means it must require no external dependencies other than the project .lua 
 - Extend the Actor RAM map in `Actor.lua`.
 - Add Enums in `Cst.lua`.
 - Add new addresses in `Addr_JP_10.wch` via Tools->RAM Watch
+..- Dungeon map/key/compass/flags.
+..- Permanent flags.
 - Create new mods following examples in `/Mods`.
 
 
