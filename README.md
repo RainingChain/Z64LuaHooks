@@ -31,10 +31,14 @@ This means it must require no external dependencies other than the project .lua 
 
 
 ####Mods made so far:
+- [Minimap Displaying All Actors](https://youtu.be/1x5szVqoyuU)
+- [Attracts all Actors towards Link](https://www.youtube.com/watch?v=wQbrlCaYlx0)
+- [Scale Link and Actors](https://www.youtube.com/watch?v=Oczgt9Ib9KI)
 - Change Name
 - Bomb Tornado (Causes bombs to loop in circles around you)
 - Display Bomb	(Display all bombs x,y,z,timer and address)
 - Press L to levitate
+- Teleport
 - Change Tunic Hex Color (Modifies ROM)
 
 [Mods Display Video](https://www.youtube.com/watch?v=kUZ-sWL7h0Q)
@@ -69,7 +73,7 @@ This means it must require no external dependencies other than the project .lua 
 	
 ######Addr
 
-	On initialization, every address in the file "Addr_JP_10.wch" will create its corresponding Addr accessible via Addr.getById(id).
+	On initialization, every address in the file "Addr_JP_10.wch" will create its corresponding Addr accessible via `Addr.getById(id)`.
 
 	constructor(number address,Addr.SIZE size,Addr.TYPE type,string id)
 	
@@ -105,6 +109,14 @@ This means it must require no external dependencies other than the project .lua 
 		CST.ACTOR_TYPE type
 		string addressHex
 		number address
-		
+		string id
+		Addr x
+		Addr y
+		Addr z
+		Addr next
+		Addr prev
+		Addr scaleX
+		Addr scaleY
+		Addr scaleZ
 		
 		

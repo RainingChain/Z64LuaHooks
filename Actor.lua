@@ -24,11 +24,14 @@ Actor.new = function(address,silentError)
 	
 	self.type = Addr.new(self.address,SIZE.word).get()	
 	
-	--based on http://wiki.cloudmodding.com/oot/Actors#Actor_Instances
 	
 	self.variant = Addr.new(self.address + 0x02,SIZE.byte).get()	
 	self.roomNo = Addr.new(self.address + 0x03,SIZE.byte).get()	
 	
+	self.id = address..self.type..self.roomNo..self.variant	--relatively unique
+	
+	
+	--based on http://wiki.cloudmodding.com/oot/Actors#Actor_Instances
 	self.collisionX = Addr.new(self.address + 0x08,SIZE.float,TYPE.float)
 	self.collisionZ = Addr.new(self.address + 0x0C,SIZE.float,TYPE.float)
 	self.collisionY = Addr.new(self.address + 0x10,SIZE.float,TYPE.float)
@@ -36,7 +39,6 @@ Actor.new = function(address,silentError)
 	self.initRotX = Addr.new(self.address + 0x14,SIZE.word)
 	self.initRotZ = Addr.new(self.address + 0x16,SIZE.word)
 	self.initRotY = Addr.new(self.address + 0x18,SIZE.word)
-	
 	
 	self.x = Addr.new(self.address + 0x24,SIZE.float,TYPE.float)
 	self.z = Addr.new(self.address + 0x28,SIZE.float,TYPE.float)
@@ -62,6 +64,10 @@ Actor.new = function(address,silentError)
 	end	
 	
 	return self
+end
+
+Actor.getDistance = function(act0,act1)
+	return Utils.getDistance(act0.x.get(),act0.y.get(),act1.x.get(),act1.y.get())
 end
 
 

@@ -200,6 +200,11 @@ Utils.getLuaDir = function()
 	return io.popen"cd":read'*l'
 end
 
+
+Utils.getDistance = function(x0,y0,x1,y1)
+	return ((x0-x1)^2 + (y0-y1)^2)^0.5
+end
+
 event.unregisterbyname('timeout_loop')
 event.onframestart(timeout_loop,'timeout_loop')
 
