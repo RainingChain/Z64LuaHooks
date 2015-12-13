@@ -3,13 +3,11 @@ Z64 Lua Hooks
 
 This project provides support for mods for Ocarina of Time JP 1.0.
 
-It is meant to work right out of the box.
-
-This means it must require no external dependencies other than the project .lua files, the unmodified JP 1.0 ROM and unmodified [Bizhawk emulator](http://tasvideos.org/BizHawk.html).
+All you need to use it is a Ocarina of Time JP 1.0 ROM and the [Bizhawk emulator](http://tasvideos.org/BizHawk.html). No setup required, it works right out of the box.
 
 ####Goal:
+- Provide read/write addresses support by id. Ex: `Addr.getById("Amount.Bomb").set(10)`
 - Provide event support. Ex: `Utils.onButtonPress`
-- Provide read/write addresses support by id. Ex: `Addr.getById("Amount.Bomb").set(10) `
 - Provide Enum. Ex: `CST.ACTOR_TYPE.Bomb == 0x0010`
 - Provide Actor RAM map. Ex: `Actor.new(pointerToBomb).x.set(10)`
 - Provide modular Mod support. Ex: See `/Mods` folder.
@@ -41,7 +39,7 @@ This means it must require no external dependencies other than the project .lua 
 - Teleport
 - Change Tunic Hex Color (Modifies ROM)
 
-[Mods Display Video](https://www.youtube.com/watch?v=kUZ-sWL7h0Q)
+[More Mods Video](https://www.youtube.com/watch?v=kUZ-sWL7h0Q)
 
 
 
@@ -73,7 +71,7 @@ This means it must require no external dependencies other than the project .lua 
 	
 ######Addr
 
-	On initialization, every address in the file "Addr_JP_10.wch" will create its corresponding Addr accessible via `Addr.getById(id)`.
+	On initialization, every address in `Addr_JP_10.wch` will create its corresponding Addr accessible via `Addr.getById(id)`.
 
 	constructor(number address,Addr.SIZE size,Addr.TYPE type,string id)
 	
