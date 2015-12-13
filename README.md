@@ -1,7 +1,7 @@
-Zelda Framework
+Z64 Lua Hooks
 ==============
 
-This framework provides support for mods for Ocarina of Time JP 1.0.
+This project provides support for mods for Ocarina of Time JP 1.0.
 
 It is meant to work right out of the box.
 
