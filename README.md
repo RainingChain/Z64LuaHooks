@@ -23,8 +23,8 @@ All you need to use it is a Ocarina of Time JP 1.0 ROM and the [Bizhawk emulator
 - Extend the Actor RAM map in `Actor.lua`.
 - Add Enums in `Cst.lua`.
 - Add new addresses in `Addr_JP_10.wch` via Tools->RAM Watch
-..- Dungeon map/key/compass/flags.
-..- Permanent flags.
+  - Dungeon map/key/compass/flags.
+  - Permanent flags.
 - Create new mods following examples in `/Mods`.
 
 
