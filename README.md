@@ -1,17 +1,19 @@
 Z64 Lua Hooks
 ==============
 
-This project provides support for mods for Ocarina of Time 1.0.
+This project provides an environment to create hooks and mods for Ocarina of Time 1.0.
 
-All you need to use it is a Ocarina of Time 1.0 ROM and the [Bizhawk emulator](http://tasvideos.org/BizHawk.html). No setup required, it works right out of the box.
+All you need is a Ocarina of Time 1.0 ROM and the [Bizhawk emulator](http://tasvideos.org/BizHawk.html). 
 
-####Goal:
-- Provide read/write addresses support by id. Ex: `Addr.getById("Amount.Bomb").set(10)`
-- Provide Actor RAM map. Ex: `Actor.new(pointerToBomb).x.set(10)`
-- Provide Actor Finder. Ex: `Actor.getActorsByType(CST.ACTOR_TYPE.Bomb)[1].x.set(10)`
-- Provide Enum. Ex: `CST.ACTOR_TYPE.Bomb == 0x0010`
-- Provide modular Mod support. Ex: See `/Mods` folder.
-- Provide event support. Ex: `Utils.onButtonPress`
+No setup is required. It works right out of the box.
+
+####Features:
+- Read/write address support by id. Ex: `Addr.getById("Amount.Bomb").set(10)`
+- Actor RAM map. Ex: `Actor.new(pointerToBomb).x.set(10)`
+- Actor Finder. Ex: `Actor.getActorsByType(CST.ACTOR_TYPE.Bomb)[1].timer.set(11)`
+- Enum. Ex: `CST.ACTOR_TYPE.Bomb == 0x0010`
+- Modular Mod support. Ex: See `/Mods` folder.
+- Event support. Ex: `Utils.onButtonPress` `Utils.setTimeout`
 
 ####How to use:
 - Open Bizhawk and load the ROM.
