@@ -1,6 +1,5 @@
 Mod = require("./../Mod")
 
-local ActorList = Addr.getById("Actor.List")
 local oldList = {}
 local newList = {}
 
@@ -45,17 +44,14 @@ mod = Mod.new("scale","Scale Modifier",function()
 		local scaleLY = tonumber(forms.gettext(tbLY)) or 1
 		local scaleLZ = tonumber(forms.gettext(tbLZ)) or 1
 		
-		for name,offset in pairs(CST.ACTOR_CATEGORY) do
-			local count = ActorList.get(offset,0)
-			local pt = ActorList.get(offset,1)
-			
-			local i
-			for i=0,count-1 do
-				local act = Actor.new(pt,true)
+		for name,cat in pairs(CST.ACTOR_CATEGORY) do
+			local actList = Actor.getActorsByCategory(cat)
+			for i=1,actList.length do
+				local act = actList[i]
 				newList[act.id] = act
 				if(not oldList[act.id]) then	--if not in oldList, then scaling hasnt been applied yet
 					Utils.setTimeout(math.random(),function()	--must change scale after init
-						if(offset == CST.ACTOR_CATEGORY.Player) then
+						if(cat == CST.ACTOR_CATEGORY.Player) then
 							act.scaleX.set(scaleLX*act.scaleX.get())
 							act.scaleY.set(scaleLY*act.scaleY.get())
 							act.scaleZ.set(scaleLZ*act.scaleZ.get())
@@ -64,9 +60,8 @@ mod = Mod.new("scale","Scale Modifier",function()
 							act.scaleY.set(scaleY*act.scaleY.get())
 							act.scaleZ.set(scaleZ*act.scaleZ.get())
 						end
-					end,5)
+					end,100)
 				end
-				pt = act.next.get()
 			end
 		end
 		oldList = newList

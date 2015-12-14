@@ -1,6 +1,7 @@
 Addr = require("Addr")
 Utils = require("Utils")
 
+local ActorList = Addr.getById("Actor.List")
 local SIZE = Addr.SIZE
 local TYPE = Addr.TYPE
 
@@ -15,20 +16,26 @@ end
 
 Actor = {}
 
-Actor.new = function(address,silentError)
+Actor.new = function(address)
 	address = address % CST.GLOBAL_OFFSET
 	
 	local self = {}
 	self.address = address
 	self.addressHex = Utils.decToHex(address)
 	
-	self.type = Addr.new(self.address,SIZE.word).get()	
-	
+	self.type = Addr.new(self.address,SIZE.word).get()
+	self.typeHex = Utils.decToHex(self.type,4)
+	self.typeName = CST.ACTOR_TYPE_TO_NAME[self.type]
 	
 	self.variant = Addr.new(self.address + 0x02,SIZE.byte).get()	
 	self.roomNo = Addr.new(self.address + 0x03,SIZE.byte).get()	
 	
-	self.id = address..self.type..self.roomNo..self.variant	--relatively unique
+	self.id = address..self.type..self.roomNo..self.variant	--relatively unique	 
+	
+	--self.uid = Addr.new(self.address + 176,SIZE.double).get()	
+	--if(self.uid ~= 0) then
+	--	console.log("damnit")
+	--end
 	
 	
 	--based on http://wiki.cloudmodding.com/oot/Actors#Actor_Instances
@@ -59,8 +66,6 @@ Actor.new = function(address,silentError)
 		
 	if(ActorModel.LIST[self.type]) then
 		ActorModel.LIST[self.type](self)
-	elseif(not silentError) then
-		Utils.onError("No constructor for actor type " .. self.type)
 	end	
 	
 	return self
@@ -71,14 +76,117 @@ Actor.getDistance = function(act0,act1)
 end
 
 
+
+--getter
+--Actor.getActorsByCategory(CST.ACTOR_CATEGORY.Bomb)[1].type == CST.ACTOR_TYPE.Bomb
+
+Actor.QUERY = {
+	address="address",
+	actor="actor",
+	addressHex="addressHex",
+	type="type",
+	typeHex="typeHex",
+	typeName="typeName",
+}	
+
+Actor.getActorByCategory = function(cat)	--first one
+	local count = ActorList.get(cat,0)
+	if(count) then
+		return Actor.new(ActorList.get(cat,1))
+	end
+	return nil
+end
+
+Actor.getActorByType = function(type,categories)
+	categories = categories or CST.ACTOR_CATEGORY	--restrict to speed up
+	for i,j in pairs(categories) do
+		local list = Actor.getActorsByCategory(j)
+		local k
+		for k=1,list.length do
+			if(list[k].type == type) then
+				return list[k]
+			end
+		end
+	end
+	return nil
+end
+
+Actor.getActorsByType = function(type)	
+	local res = {length = 0}
+	for i,j in pairs(CST.ACTOR_CATEGORY) do
+		local list = Actor.getActorsByCategory(j)
+		local k
+		for k=1,list.length do
+			if(list[k].type == type) then
+				res.length = res.length + 1
+				res[res.length] = list[k]
+			end
+		end
+	end
+	return res
+end
+
+
+Actor.getActors = function()
+	local res = {length=0}
+	for i,j in pairs(CST.ACTOR_CATEGORY) do
+		local list = Actor.getActorsByCategory(j)
+		for i=1,list.length do
+			res.length = res.length + 1 
+			res[res.length] = list[i]
+		end		
+	end
+	return res	
+end
+
+
+Actor.getActorsByCategory = function(cat,query)
+	local res = {}
+	local count = ActorList.get(cat,0)
+	res.length = count
+	local pt = ActorList.get(cat,1)
+	local i
+	for i=1,count do
+		local act = Actor.new(pt)
+		if(not query or query == Actor.QUERY.actor) then
+			res[i] = act
+		elseif(query == Actor.QUERY.address) then
+			res[i] = act.address
+		elseif(query == Actor.QUERY.addressHex) then
+			res[i] = act.addressHex
+		elseif(query == Actor.QUERY.typeHex) then
+			res[i] = act.typeHex
+		elseif(query == Actor.QUERY.typeName) then
+			res[i] = act.typeName
+		elseif(query == Actor.QUERY.type) then
+			res[i] = act.type
+		end
+		pt = act.next.get()
+	end
+	return res
+end
+
+Actor.printAll = function(query)
+	for i,j in pairs(CST.ACTOR_CATEGORY) do
+		console.log(i,Utils.arrayToString(Actor.getActorsByCategory(j,query)))
+	end
+end
+
+
 ActorModel.new(CST.ACTOR_TYPE.Bomb,function(self)
 	self.timer = Addr.new(self.address + 0x1E9)
 end)
 
-
 ActorModel.new(CST.ACTOR_TYPE.Bombchu,function(self)	
 	self.timer = Addr.new(self.address + 0x141)
 end)
+
+ActorModel.new(CST.ACTOR_TYPE.Warpportals,function(self)	
+	self.timer = Addr.new(self.address + 0x183)
+end)
+
+
+
 
 
 

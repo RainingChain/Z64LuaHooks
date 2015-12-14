@@ -1,16 +1,17 @@
 Z64 Lua Hooks
 ==============
 
-This project provides support for mods for Ocarina of Time JP 1.0.
+This project provides support for mods for Ocarina of Time 1.0.
 
-All you need to use it is a Ocarina of Time JP 1.0 ROM and the [Bizhawk emulator](http://tasvideos.org/BizHawk.html). No setup required, it works right out of the box.
+All you need to use it is a Ocarina of Time 1.0 ROM and the [Bizhawk emulator](http://tasvideos.org/BizHawk.html). No setup required, it works right out of the box.
 
 ####Goal:
 - Provide read/write addresses support by id. Ex: `Addr.getById("Amount.Bomb").set(10)`
-- Provide event support. Ex: `Utils.onButtonPress`
-- Provide Enum. Ex: `CST.ACTOR_TYPE.Bomb == 0x0010`
 - Provide Actor RAM map. Ex: `Actor.new(pointerToBomb).x.set(10)`
+- Provide Actor Finder. Ex: `Actor.getActorsByType(CST.ACTOR_TYPE.Bomb)[1].x.set(10)`
+- Provide Enum. Ex: `CST.ACTOR_TYPE.Bomb == 0x0010`
 - Provide modular Mod support. Ex: See `/Mods` folder.
+- Provide event support. Ex: `Utils.onButtonPress`
 
 ####How to use:
 - Open Bizhawk and load the ROM.
@@ -26,12 +27,14 @@ All you need to use it is a Ocarina of Time JP 1.0 ROM and the [Bizhawk emulator
   - Dungeon map/key/compass/flags.
   - Permanent flags.
 - Create new mods following examples in `/Mods`.
-
+- Check `TODO.txt`
 
 ####Mods made so far:
 - [Minimap Displaying All Actors](https://youtu.be/1x5szVqoyuU)
 - [Attracts all Actors towards Link](https://www.youtube.com/watch?v=wQbrlCaYlx0)
 - [Scale Link and Actors](https://www.youtube.com/watch?v=Oczgt9Ib9KI)
+- [Display Actor Data](https://youtu.be/bcX-8PJ1yzA)
+- [Teleport](https://youtu.be/PzrsyLTpNb8)
 - Change Name
 - Bomb Tornado (Causes bombs to loop in circles around you)
 - Display Bomb	(Display all bombs x,y,z,timer and address)
@@ -40,8 +43,6 @@ All you need to use it is a Ocarina of Time JP 1.0 ROM and the [Bizhawk emulator
 - Change Tunic Hex Color (Modifies ROM)
 
 [More Mods Video](https://www.youtube.com/watch?v=kUZ-sWL7h0Q)
-
-
 
 
 #### API
@@ -102,6 +103,14 @@ All you need to use it is a Ocarina of Time JP 1.0 ROM and the [Bizhawk emulator
 ######Actor
 
 	constructor(number address)
+		
+	static
+		int* getActorByCategory(CST.ACTOR_CATEGORY cat)
+		int*[] getActorsByCategory(CST.ACTOR_CATEGORY cat)
+		int* getActorByType(CST.ACTOR_TYPE type)
+		int*[] getActorsByType(CST.ACTOR_TYPE type)
+		int*[] getActors()
+		
 		
 	instance
 		CST.ACTOR_TYPE type

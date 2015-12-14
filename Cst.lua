@@ -1,3 +1,10 @@
+
+local invertTable = function(list)
+	local res = {}
+	for i,j in pairs(list) do res[j] = i end
+	return res
+end
+
 CST = {}
 CST.GLOBAL_OFFSET = 0x80000000
 
@@ -60,8 +67,7 @@ CST.ITEM = {
 	FairyBowFireArrow=56,
 	FairyBowIceArrow=57,
 	FairyBowLightArrow=58,
-}
-CST.ITEM_PLUS = {
+	--unequippable
 	SOLDOUT=44,
 	KokiriSword=59,
 	MasterSword=60,
@@ -139,6 +145,7 @@ CST.ITEM_PLUS = {
 	EmptyButton=255,
 }
 
+CST.ITEM_TO_NAME = invertTable(CST.ITEM)
 
 CST.LINK_STATE = {
 	DisableControl=0x00000001,
@@ -184,6 +191,7 @@ CST.ACTOR_CATEGORY = {
 	Chest=11,
 }
 
+CST.ACTOR_CATEGORY_TO_NAME = invertTable(CST.ACTOR_CATEGORY)
 
 CST.ACTOR_TYPE = {
 	Link=0x0000,
@@ -615,8 +623,9 @@ CST.ACTOR_TYPE = {
 	NaviInfospotGreenTimeBlock=0x01D6
 }
 
+CST.ACTOR_TYPE_TO_NAME = invertTable(CST.ACTOR_TYPE)
 
-CST.MAP_TO_EXIT = {
+CST.MAP_TO_EXIT = {	--only 1 of the possible exits
 	DekuTree=0x0000,
 	DodongosCavern=0x0004,
 	GerudoTrainingGrounds=0x0008,
@@ -728,7 +737,7 @@ CST.MAP_TO_EXIT = {
 	TowerCollapseInteriorExit=0x056C,
 }
 
-
+CST.EXIT_TO_MAP = invertTable(CST.MAP_TO_EXIT)
 
 CST.INPUT = {
 	["A"] = "P1 A",

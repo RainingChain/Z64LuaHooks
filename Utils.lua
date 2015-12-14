@@ -200,6 +200,52 @@ Utils.getLuaDir = function()
 	return io.popen"cd":read'*l'
 end
 
+Utils.arrayToString = function(list,hex)
+	if(not list.length) then
+		return Utils.onError("No .length on list provided in Utils.arrayToString")
+	end	
+	local i
+	local str = "["
+	for i=1,list.length do
+		if(hex) then
+			str = str .. Utils.decToHex(list[i])
+		else
+			str = str .. list[i]
+		end
+		if(i ~= list.length) then
+			str = str .. ","
+		end
+	end
+	return str .. "]"
+end
+
+Utils.invertTable = function(list)
+	local res = {}
+	for i,j in pairs(list) do 
+		res[j] = i 
+	end
+	return res
+end
+
+Utils.clone = function(list)
+	local res = {}
+	for i,j in pairs(list) do
+		res[i] = j
+	end
+	return res
+end
+
+Utils.addPadding = function(str,length,charr,left)
+	charr = charr or " "
+	while string.len(str) < length do
+		if(left) then
+			str = charr .. str
+		else
+			str = str .. charr
+		end
+	end
+	return str
+end
 
 Utils.getDistance = function(x0,y0,x1,y1)
 	return ((x0-x1)^2 + (y0-y1)^2)^0.5

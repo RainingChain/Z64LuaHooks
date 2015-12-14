@@ -1,5 +1,4 @@
 
-
 Utils = require("Utils")
 Addr = require("Addr")
 
@@ -35,6 +34,18 @@ Utils.onButtonRelease("f",CST.INPUT.B,function()
 	Utils.onButtonHold("e",CST.INPUT.A)
 	console.log("event with button A should now be removed")
 end)
+
+
+assert(Utils.arrayToString({length=2,[1]=23,[2]="ga"}) == "[23,ga]")
+assert(Utils.arrayToString({length=2,[1]=12,[2]=8},true) == "[C,8]")
+assert(Utils.decToHex(100) == "64")
+assert(Utils.decToHex(100,4) == "0064")
+assert(Utils.decToBin(100) == "1100100")
+assert(Utils.decToBin(100,10) == "0001100100")
+assert(Utils.invertTable({bob="a"}).a == "bob")
+assert(Utils.addPadding("bob",5) == "bob  ")
+assert(Utils.addPadding("bob",5,"y") == "bobyy")
+assert(Utils.addPadding("bob",5,"y",true) == "yybob")
 
 
 --####################

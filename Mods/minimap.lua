@@ -3,11 +3,10 @@ Mod = require("./../Mod")
 local canvas
 local width = 500
 local height = 500
-local ActorList = Addr.getById("Actor.List")
 local LinkX = Addr.getById("Move.X")
 local LinkY = Addr.getById("Move.Y")
 
-local typeColor = {
+local catColor = {
 	[CST.ACTOR_CATEGORY.Bomb]={color=0xFF000000,size=10},
 	[CST.ACTOR_CATEGORY.Chest]={color=0xFFFFFF00,size=10},
 	[CST.ACTOR_CATEGORY.Door]={color=0xFF888888,size=10},
@@ -29,18 +28,14 @@ Mod.new("minimap","Dynamic Minimap",function()
 		local linkX = LinkX.get();
 		local linkY = LinkY.get();
 		
-		for type,colorSize in pairs(typeColor) do
-			local count = ActorList.get(type,0)
-			local pt = ActorList.get(type,1)
+		for cat,cs in pairs(catColor) do
+			local actList = Actor.getActorsByCategory(cat)
 			
-			local i
-			for i=0,count-1 do
-				local actor = Actor.new(pt,true)
+			for i=1,actList.length do
+				local actor = actList[i]
 				local x = (actor.x.get()-linkX)/15 + width/2
 				local y = (actor.y.get()-linkY)/15 + height/2
-				local color = colorSize.color
-				local size = colorSize.size				
-				canvas.DrawRectangle(x-size/2,y-size/2,size,size,0,color)
+				canvas.DrawRectangle(x-cs.size/2,y-cs.size/2,cs.size,cs.size,0,cs.color)
 				pt = actor.next.get()
 			end
 		end

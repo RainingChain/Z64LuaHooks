@@ -1,0 +1,21 @@
+Actor
+	add id
+	actor caching
+		garbage collector
+		
+	int* getActorById(number id)	
+		
+		
+Add Enums in Cst.lua
+
+Add new addresses in `Addr_JP_10.wch` via Tools->RAM Watch
+	Dungeon map/key/compass/flags.
+	Permanent flags.
+	Addresses to Actor Overlay Table
+	http://wiki.cloudmodding.com/oot/Global_Context
+	
+Create new mods following examples in `/Mods`.
+	Kill every monsters
+	Change language
+	
+	

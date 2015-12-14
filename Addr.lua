@@ -56,13 +56,15 @@ function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 		elseif(self.size == SIZE.byte) then
 			if(self.type == TYPE.signed) then
 				return mem.write_s8(self.address,val)	
+			else
+				return mem.write_u8(self.address,val)
 			end
-			return mem.write_u8(self.address,val)			
 		elseif(self.size == SIZE.word) then
 			if(self.type == TYPE.signed) then
 				return mem.write_s16_be(self.address,val)	
+			else
+				return mem.write_u16_be(self.address,val)	
 			end
-			return mem.write_u16_be(self.address,val)	
 		elseif(self.size == SIZE.double) then
 			if(self.type == TYPE.signed) then
 				return mem.write_s32_be(self.address,val)	
@@ -92,22 +94,23 @@ function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 		elseif(self.size == SIZE.double) then
 			if(self.type == TYPE.signed) then
 				return mem.read_s32_be(self.address)	
-			end
-			if(self.type == TYPE.float) then
+			elseif(self.type == TYPE.float) then
 				return mem.readfloat(self.address,true)	
+			else
+				return mem.read_u32_be(self.address)	
 			end
-			return mem.read_u32_be(self.address)	
 		end
 	end
 	
 	self.toString = function()
-		local val = self.get();		
-		if(self.type == SIZE.bin) then
+		local val = self.get();
+		if(self.type == TYPE.bin) then
 			return Utils.decToBin(val)
-		elseif(self.type == SIZE.hex) then
-			return bizstring.hex(val)
+		elseif(self.type == TYPE.hex) then
+			return Utils.decToHex(val,self.size*2)
+		else
+			return tostring(val)
 		end
-		return tostring(val)		
 	end
 	
 	self.onChange = function(id,func)

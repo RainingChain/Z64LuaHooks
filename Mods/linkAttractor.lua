@@ -1,6 +1,5 @@
 Mod = require("./../Mod")
 
-local ActorList = Addr.getById("Actor.List")
 local LinkX = Addr.getById("Move.X")
 local LinkY = Addr.getById("Move.Y")
 local LinkZ = Addr.getById("Move.Z")
@@ -12,40 +11,40 @@ Mod.new("linkAttractor","Attractor",function()
 		local linkY = LinkY.get()
 		local linkZ = LinkZ.get()
 		
-		for name,offset in pairs(CST.ACTOR_CATEGORY) do
-			if(offset ~= CST.ACTOR_CATEGORY.Player) then
-				local count = ActorList.get(offset,0)
-				local pt = ActorList.get(offset,1)
+		for name,cat in pairs(CST.ACTOR_CATEGORY) do
+			local actList = Actor.getActorsByCategory(cat)
+			if(cat == CST.ACTOR_CATEGORY.Player) then
+				actList.length = 0
+			end
+			
+			for i=1,actList.length do
+				local actor = actList[i]
+				rot[actor.id] = rot[actor.id] or {
+					value=0,
+					inc=(math.random()-0.5)*math.pi/10,
+					dist=25 + 75 * math.random(),
+					z=80 + math.random()*80
+				}
+				local r = rot[actor.id]
+				local x = actor.x.get()
+				local y = actor.y.get()
+				local z = actor.z.get()
 				
-				local i
-				for i=0,count-1 do
-					local actor = Actor.new(pt,true)
-					local x = actor.x.get()
-					local y = actor.y.get()
-					local z = actor.z.get()
-					rot[pt] = rot[pt] or {
-						value=0,
-						inc=(math.random()-0.5)*math.pi/10,
-						dist=25 + 75 * math.random(),
-						z=80 + math.random()*80
-					}
-					rot[pt].value = rot[pt].value + rot[pt].inc
+				r.value = r.value + r.inc
+				
+				local dist = Utils.getDistance(linkX,linkY,x,y)
+				if(dist < 500) then
+					local tx = linkX + math.cos(r.value) * r.dist
+					local ty = linkY + math.sin(r.value) * r.dist
 					
-					local dist = Utils.getDistance(linkX,linkY,x,y)
-					if(dist < 500) then
-						local tx = linkX + math.cos(rot[pt].value) * rot[pt].dist
-						local ty = linkY + math.sin(rot[pt].value) * rot[pt].dist
-						
-						actor.x.set(x + (tx - x)/10)
-						actor.y.set(y + (ty - y)/10)
-						
-						if(z < linkZ + rot[pt].z) then
-							actor.z.set(z+5)
-						else
-							actor.z.set(linkZ + rot[pt].z)
-						end
+					actor.x.set(x + (tx - x)/10)
+					actor.y.set(y + (ty - y)/10)
+					
+					if(z < linkZ + r.z) then
+						actor.z.set(z+5)
+					else
+						actor.z.set(linkZ + r.z)
 					end
-					pt = actor.next.get()
 				end
 			end
 		end

@@ -12,13 +12,8 @@ mod = Mod.new("teleport","Teleport",function()
 		form = nil
 		mod.deactivate()
 	end)
-	
-	local v = {}	--because bizhawk wants name as value
-	for name,offset in pairs(CST.MAP_TO_EXIT) do
-		v[offset] = name
-	end
-	
-	dropdown = forms.dropdown(form,v,0,0,200,20)
+
+	dropdown = forms.dropdown(form,CST.EXIT_TO_MAP,0,0,200,20)
 	forms.label(form,"Freeze Destination",0,30)
 	checkbox = forms.checkbox(form,"",100,25)
 	
