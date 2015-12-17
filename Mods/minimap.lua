@@ -1,4 +1,4 @@
-if(not Mod.isGame({CST.GAMES.OOT})) then
+if(not Mod.isGame({CST.GAMES.OOT,CST.GAMES.MM})) then
 	return
 end
 

@@ -1,3 +1,8 @@
 Domain ROM
 SystemID N64
 003E87D0	d	u	1	RDRAM	[12,3]Actor.List
+003FFDD4	d	f	1	RDRAM	Move.X
+003FFDD8	d	f	1	RDRAM	Move.Z
+003FFDDC	d	f	1	RDRAM	Move.Y
+
+
