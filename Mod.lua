@@ -1,8 +1,3 @@
-Addr = require("Addr")
-Utils = require("Utils")
-Actor = require("Actor")
-CST = require('Cst')
-
 local formCheckbox = {}
 
 Mod = {}
@@ -39,6 +34,7 @@ Mod.new = function(id,name,onActivate,onDeactivate)
 	end
 	
 	Mod.LIST[id] = self
+	console.log("Mod loaded: " .. id)	
 	return self
 end
 
@@ -56,6 +52,11 @@ Mod.deactivate = function(id)
 	Mod.LIST[id].deactivate()
 end	
 
+
+Mod.isGame = function(games)
+	return Utils.contains(games,CST.GAME)
+
+end
 
 
 Mod.openMainForm = function()	

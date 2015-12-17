@@ -1,7 +1,6 @@
-Mod = require("./../Mod")
-
-local oldList = {}
-local newList = {}
+if(not Mod.isGame({CST.GAMES.OOT})) then
+	return
+end
 
 local mod
 local form
@@ -13,7 +12,7 @@ local tbLY
 local tbLZ
 
 mod = Mod.new("scale","Scale Modifier",function()
-	form = forms.newform(200,200,"Change Tunic Color",function()
+	form = forms.newform(200,200,"Scale",function()
 		form = nil
 		mod.deactivate()
 	end)
@@ -34,8 +33,6 @@ mod = Mod.new("scale","Scale Modifier",function()
 	tbLZ = forms.textbox(form,"1.0",50,20,nil,70,125)
 	
 	Utils.onLoop("scale-loop",function()	
-		newList = {}
-		
 		local scaleX = tonumber(forms.gettext(tbX)) or 1
 		local scaleY = tonumber(forms.gettext(tbY)) or 1
 		local scaleZ = tonumber(forms.gettext(tbZ)) or 1
@@ -44,27 +41,24 @@ mod = Mod.new("scale","Scale Modifier",function()
 		local scaleLY = tonumber(forms.gettext(tbLY)) or 1
 		local scaleLZ = tonumber(forms.gettext(tbLZ)) or 1
 		
-		for name,cat in pairs(CST.ACTOR_CATEGORY) do
-			local actList = Actor.getActorsByCategory(cat)
-			for i=1,actList.length do
-				local act = actList[i]
-				newList[act.id] = act
-				if(not oldList[act.id]) then	--if not in oldList, then scaling hasnt been applied yet
-					Utils.setTimeout(math.random(),function()	--must change scale after init
-						if(cat == CST.ACTOR_CATEGORY.Player) then
-							act.scaleX.set(scaleLX*act.scaleX.get())
-							act.scaleY.set(scaleLY*act.scaleY.get())
-							act.scaleZ.set(scaleLZ*act.scaleZ.get())
-						else 
-							act.scaleX.set(scaleX*act.scaleX.get())
-							act.scaleY.set(scaleY*act.scaleY.get())
-							act.scaleZ.set(scaleZ*act.scaleZ.get())
-						end
-					end,100)
-				end
+		local actList = Actor.getActors()
+		for i=1,actList.length do
+			local act = actList[i]
+			if(not act.custom["scale"]) then
+				act.custom["scale"] = true
+				Utils.setTimeout(math.random(),function()	--must change scale after init
+					if(act.isLink) then
+						act.scaleX.set(scaleLX*act.scaleX.get())
+						act.scaleY.set(scaleLY*act.scaleY.get())
+						act.scaleZ.set(scaleLZ*act.scaleZ.get())
+					else 
+						act.scaleX.set(scaleX*act.scaleX.get())
+						act.scaleY.set(scaleY*act.scaleY.get())
+						act.scaleZ.set(scaleZ*act.scaleZ.get())
+					end
+				end,25)
 			end
 		end
-		oldList = newList
 	end,3)
 end,function()
 	Utils.clearOnLoop("scale-loop")

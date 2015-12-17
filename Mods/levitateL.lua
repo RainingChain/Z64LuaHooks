@@ -1,5 +1,6 @@
-Mod = require("./../Mod")
-
+if(not Mod.isGame({CST.GAMES.OOT})) then
+	return
+end
 
 Mod.new("levitateL","Press L to Levitate",function()
 	Utils.onButtonHold("levitateL-key",CST.INPUT.L,function()

@@ -1,4 +1,6 @@
-Mod = require("./../Mod")
+if(not Mod.isGame({CST.GAMES.OOT})) then
+	return
+end
 
 local form
 local dropdown

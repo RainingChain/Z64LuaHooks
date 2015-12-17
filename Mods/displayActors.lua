@@ -1,4 +1,6 @@
-Mod = require("./../Mod")
+if(not Mod.isGame({CST.GAMES.OOT,CST.GAMES.MM})) then
+	return
+end
 
 local form
 local myForms = {}
@@ -8,14 +10,12 @@ local typeDd
 local max = 28
 local hexCb
 
-
 local NOFILTER = "0--No Filter--"
 local catList = Utils.clone(CST.ACTOR_CATEGORY_TO_NAME)
 catList.whatever = NOFILTER
 
 local typeList = Utils.clone(CST.ACTOR_TYPE_TO_NAME)
 typeList.whatever = NOFILTER
-
 
 mod = Mod.new("displayActors","Display Actors",function()
 	form = forms.newform(600,600,"Actors",function()
@@ -54,7 +54,7 @@ mod = Mod.new("displayActors","Display Actors",function()
 									.. " x=" .. Utils.addPadding(""..math.floor(act.x.get()),5)
 									.. " y=" .. Utils.addPadding(""..math.floor(act.y.get()),5)
 									.. " z=" .. Utils.addPadding(""..math.floor(act.z.get()),5)
-								if(cat == CST.ACTOR_CATEGORY.Bomb or act.type == CST.ACTOR_TYPE.Warpportals) then
+								if(act.timer) then
 									text = text .. " timer=" .. act.timer.get() 
 								end	
 							else

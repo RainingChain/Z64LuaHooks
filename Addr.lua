@@ -1,6 +1,4 @@
-Utils = require("Utils")
-
-local WCH_PATH = "Addr_JP_10.wch"
+local WCH_PATH = CST.GAME.."\\Addr.wch"
 
 Addr = {}
 
@@ -8,9 +6,6 @@ local SIZE = { bit=1/8, byte=8/8,word=16/8,double=32/8,pointer=32/8,float=32/8 }
 local TYPE = { unsigned=0,signed=1,hex=2,binary=3,fixedPoint12=4,fixedPoint20=5,fixedPoint16=6,float=7}
 Addr.SIZE = SIZE
 Addr.TYPE = TYPE
-
-
-memory.usememorydomain("ROM")
 
 function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 	address = address % CST.GLOBAL_OFFSET
@@ -80,7 +75,7 @@ function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 		if(self.size == SIZE.bit) then
 			local v = mem.read_u16_be(self.address)
 			local str = Utils.decToBin(v,16)
-			return bizstring.substring(str,1+self.sbStart,self.sbLength)			
+			return bizstring.substring(str,1+self.sbStart,self.sbLength)
 		elseif(self.size == SIZE.byte) then
 			if(self.type == TYPE.signed) then
 				return mem.read_s8(self.address)	
@@ -204,11 +199,19 @@ function Addr.create(str)
 	return Addr.LIST[id]
 end
 
-
 Addr.LIST = {}
 
 function Addr.getById(id)
 	return Addr.LIST[id]
+end
+
+Addr.printJSON = function(pathFile)
+	--local JSON = (loadfile "lib.JSON.lua")()
+	pathFile = pathFile or "Addr.json"
+	local file = io.open(pathFile, "w")
+	local t = JSON:encode_pretty(Addr.LIST)
+	file:write(t)
+	file:close()	
 end
 
 
@@ -294,11 +297,6 @@ Addr.array2D.new = function(address,length,length2,sizeCell,type,isRom)
 	return self
 end
 
-Addr.init = function()
-	loadWch()
-end
-
-
 function loadWch()
 	local a = bizstring.split(Utils.readFile(WCH_PATH),"\n")
 	
@@ -310,6 +308,7 @@ function loadWch()
 	
 end
 
-Addr.init()
+loadWch()
+memory.usememorydomain("ROM")	--for ROM addr, doesnt impact RAM addr as they use mainmemory
 
 return Addr;

@@ -1,6 +1,3 @@
-
-CST = require('Cst')
-
 local callOnFrame = {}
 
 local frameCount = 0
@@ -16,7 +13,6 @@ function timeout_loop()
 	frameCount = frameCount + 1	
 	callFuncList(callOnFrame[frameCount],true)
 end
-
 	
 function callFuncList(list,setToNil)
 	if(list == nil) then
@@ -189,6 +185,7 @@ end
 
 Utils.onError = function(myErr)
 	console.log(myErr)
+	console.log(debug.traceback())
 end
 
 Utils.charAt = function(str,i)
@@ -249,6 +246,15 @@ end
 
 Utils.getDistance = function(x0,y0,x1,y1)
 	return ((x0-x1)^2 + (y0-y1)^2)^0.5
+end
+
+Utils.contains = function(list,what)
+	for i,j in pairs(list) do
+		if(j == what) then
+			return true
+		end
+	end
+	return false
 end
 
 event.unregisterbyname('timeout_loop')

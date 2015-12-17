@@ -1,8 +1,10 @@
-Addr = require("Addr")
-Utils = require("Utils")
-Actor = require("Actor")
-Mod = Mod or require("Mod")
-ModLoader = require("ModLoader")	--must be after Mod
+require("Cst")
+require("Utils")
+require("Addr")
+require("Actor")	--before ActorModel
+require(CST.GAME..".ActorModel")
+require("Mod")
+require("ModLoader")	--must be after Mod
 
 Mod.openMainForm()
 

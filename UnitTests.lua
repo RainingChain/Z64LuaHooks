@@ -1,7 +1,3 @@
-
-Utils = require("Utils")
-Addr = require("Addr")
-
 local clearTimeout
 Utils.setTimeout("a",function()
 	console.log("setTimeout 100")
@@ -46,7 +42,8 @@ assert(Utils.invertTable({bob="a"}).a == "bob")
 assert(Utils.addPadding("bob",5) == "bob  ")
 assert(Utils.addPadding("bob",5,"y") == "bobyy")
 assert(Utils.addPadding("bob",5,"y",true) == "yybob")
-
+assert(Utils.contains({"12","43"},"43"))
+assert(not Utils.contains({"12","43"},"433"))
 
 --####################
 console.log("#########")

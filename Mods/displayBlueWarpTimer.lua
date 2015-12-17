@@ -1,9 +1,10 @@
-Mod = require("./../Mod")
+if(not Mod.isGame({CST.GAMES.OOT})) then
+	return
+end
 
 local form
 local label = nil
 local mod
---Mod.activate("displayBomb")
 
 mod = Mod.new("displayBlueWarpTimer","Display Blue Warp Timer",function()
 	form = forms.newform(320,200,"Blue Warp",function()
@@ -15,7 +16,7 @@ mod = Mod.new("displayBlueWarpTimer","Display Blue Warp Timer",function()
 	Utils.onLoop("displayBlueWarpTimer-",function()	
 		local warp = Actor.getActorByType(CST.ACTOR_TYPE.Warpportals)
 		if(warp) then
-			forms.settext(label,"Timer = " .. warp.timer.get())
+			forms.settext(label,"Timer = " .. warp.timer.get() .. "   0x" .. Utils.decToHex(warp.timer.address))
 		else
 			forms.settext(label,"No Blue Warp in map.")
 		end		

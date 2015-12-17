@@ -10,7 +10,6 @@ local init = function()
 	for file in modFolder:lines() do
 		local modId = bizstring.replace(file,".lua","")
 		require("Mods." .. modId)	
-		console.log("Mod loaded: " .. modId)	
 	end
 end	
 

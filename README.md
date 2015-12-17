@@ -1,9 +1,9 @@
 Z64 Lua Hooks
 ==============
 
-This project provides an environment to create hooks and mods for Ocarina of Time 1.0.
+This project provides an environment to create hooks and mods for Ocarina of Time 1.0 and Majora's Mask US.
 
-All you need is a Ocarina of Time 1.0 ROM and the [Bizhawk emulator](http://tasvideos.org/BizHawk.html). 
+All you need is the [Bizhawk emulator](http://tasvideos.org/BizHawk.html) and the ROM. 
 
 No setup is required. It works right out of the box.
 
@@ -25,7 +25,7 @@ No setup is required. It works right out of the box.
 ####How to contribute:
 - Extend the Actor RAM map in `Actor.lua`.
 - Add Enums in `Cst.lua`.
-- Add new addresses in `Addr_JP_10.wch` via Tools->RAM Watch
+- Add new addresses in `Addr.wch` via Tools->RAM Watch
   - Dungeon map/key/compass/flags.
   - Permanent flags.
 - Create new mods following examples in `/Mods`.
@@ -70,11 +70,11 @@ No setup is required. It works right out of the box.
 		void clearOnLoop(string id)
 		string getLuaDir()
 			Return path to folder containing "main.lua"
-		
+		boolean contains(Object list, Any element)
 	
 ######Addr
 
-	On initialization, every address in `Addr_JP_10.wch` will create its corresponding Addr accessible via `Addr.getById(id)`.
+	On initialization, every address in `Addr.wch` will create its corresponding Addr accessible via `Addr.getById(id)`.
 
 	constructor(number address,Addr.SIZE size,Addr.TYPE type,string id)
 	
@@ -111,14 +111,14 @@ No setup is required. It works right out of the box.
 		int*[] getActorsByCategory(CST.ACTOR_CATEGORY cat)
 		int* getActorByType(CST.ACTOR_TYPE type)
 		int*[] getActorsByType(CST.ACTOR_TYPE type)
+		int* getActorById(number id)
 		int*[] getActors()
-		
 		
 	instance
 		CST.ACTOR_TYPE type
 		string addressHex
 		number address
-		string id
+		number id
 		Addr x
 		Addr y
 		Addr z
@@ -127,5 +127,7 @@ No setup is required. It works right out of the box.
 		Addr scaleX
 		Addr scaleY
 		Addr scaleZ
+		Object custom
+		boolean isLink
 		
 		

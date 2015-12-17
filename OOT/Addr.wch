@@ -114,4 +114,5 @@ SystemID N64
 003A9E3C	w	s	1	RDRAM	Move.AnalogueAngle
 003A9E3C	w	s	1	RDRAM	Move.AnalogueAngle
 00AED2D6	b	h	1	ROM	[3]Misc.TunicColorHex
+0000003E	b	h	1	ROM	Misc.Language--45=EN 4A=JP
 

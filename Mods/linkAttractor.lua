@@ -1,15 +1,24 @@
-Mod = require("./../Mod")
+if(not Mod.isGame({CST.GAMES.OOT,CST.GAMES.MM})) then
+	return
+end
 
-local LinkX = Addr.getById("Move.X")
-local LinkY = Addr.getById("Move.Y")
-local LinkZ = Addr.getById("Move.Z")
+--local LinkX = Addr.getById("Move.X")
+--local LinkY = Addr.getById("Move.Y")
+--local LinkZ = Addr.getById("Move.Z")
 local rot = {}
 
 Mod.new("linkAttractor","Attractor",function()
 	Utils.onLoop("linkAttractor-loop",function()	
-		local linkX = LinkX.get()
-		local linkY = LinkY.get()
-		local linkZ = LinkZ.get()
+		local link = Actor.getActorByCategory(2)
+		if(not link) then return end
+		--local linkX = LinkX.get()
+		--local linkY = LinkY.get()
+		--local linkZ = LinkZ.get()
+		local linkX = link.x.get()
+		local linkY = link.y.get()
+		local linkZ = link.z.get()
+		
+		
 		
 		for name,cat in pairs(CST.ACTOR_CATEGORY) do
 			local actList = Actor.getActorsByCategory(cat)
