@@ -13,7 +13,7 @@ mod = Mod.new("speedMod","Link Speed Mod",function()
 		form = nil
 		mod.deactivate()	
 	end)
-	forms.label(form,"Links Speed",0,0,70,20)
+	forms.label(form,"Links Speed (Hold A)",0,0,70,20)
 	
 	tbspeed = forms.textbox(form,"25",70,20,nil,0,20)
 	
