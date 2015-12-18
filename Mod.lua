@@ -18,7 +18,7 @@ Mod.new = function(id,name,onActivate,onDeactivate)
 		self.active = true
 		
 		if(updateCheckbox ~= false and formCheckbox[self.id]) then
-			forms.setproperty(formCheckbox[self.id],"Checked",true)
+			Utils.setChecked(formCheckbox[self.id],true)
 		end
 	end
 	
@@ -29,7 +29,7 @@ Mod.new = function(id,name,onActivate,onDeactivate)
 		self.active = false
 		
 		if(updateCheckbox ~= false and formCheckbox[self.id]) then
-			forms.setproperty(formCheckbox[self.id],"Checked",false)
+			Utils.setChecked(formCheckbox[self.id],false)
 		end
 	end
 	
@@ -60,7 +60,7 @@ end
 
 
 Mod.openMainForm = function()	
-	local form = forms.newform(300,400,"Mods",function()
+	local form = forms.newform(300,450,"Mods",function()
 		for key,m in pairs(Mod.LIST) do
 			m.deactivate()
 		end

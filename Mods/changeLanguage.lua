@@ -13,7 +13,8 @@ mod = Mod.new("changeLanguage","Change Language",function()
 		mod.deactivate()
 	end)
 	checkbox = forms.checkbox(form,"Japanese?",0,0)
-	forms.setproperty(checkbox,"Checked",Language.get() == CST.LANGUAGE.japanese)
+	Utils.setChecked(checkbox,Language.get() == CST.LANGUAGE.japanese)
+		
 	forms.label(form,"Active on Soft Reset.",0,25,200,25,true)
 	
 	forms.addclick(checkbox,function()

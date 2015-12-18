@@ -18,7 +18,7 @@ local typeList = Utils.clone(CST.ACTOR_TYPE_TO_NAME)
 typeList.whatever = NOFILTER
 
 mod = Mod.new("displayActors","Display Actors",function()
-	form = forms.newform(600,600,"Actors",function()
+	form = forms.newform(620,600,"Actors",function()
 		form = nil
 		mod.deactivate()
 	end)
@@ -29,7 +29,11 @@ mod = Mod.new("displayActors","Display Actors",function()
 	hexCb = forms.checkbox(form,"Hex",510,0)
 	
 	for i=1,max do
-		myForms[i] = forms.label(form,"",0,i * 20,600,20,true)
+		myForms[i] = Utils.addUI(form,"label",{text="",x=20,y=i * 20,width=600,height=20,fixedWidth=true})
+		Utils.addUI(form,"button",{x=0,y=i * 20,text=" ",width=20,height=20,onclick=function()
+			console.log(forms.gettext(myForms[i]))
+		end})
+		
 	end
 	
 	Utils.onLoop("displayActors-",function()
@@ -49,8 +53,8 @@ mod = Mod.new("displayActors","Display Actors",function()
 							local text = ""
 							if(not hex) then
 								text = Utils.addPadding(act.typeName,20) 
-									.. " 0x" .. act.typeHex
 									.. " 0x" .. act.addressHex
+									.. " 0x" .. act.typeHex
 									.. " x=" .. Utils.addPadding(""..math.floor(act.x.get()),5)
 									.. " y=" .. Utils.addPadding(""..math.floor(act.y.get()),5)
 									.. " z=" .. Utils.addPadding(""..math.floor(act.z.get()),5)

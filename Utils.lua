@@ -9,28 +9,31 @@ local callOnButtonRelease = {}
 local callOnButtonHold = {}
 local callOnLoop = {}
 
-function timeout_loop()
-	frameCount = frameCount + 1	
-	callFuncList(callOnFrame[frameCount],true)
-end
-	
-function callFuncList(list,setToNil)
+local function callFuncList (list,setToNil)
 	if(list == nil) then
 		return
 	end
 	
 	for key,value in pairs(list) do
 		if(list[key]) then
-			list[key]();
+			if not pcall(list[key]) then
+				Utils.onError("error with func "..key)
+			end
 		end
 		if(setToNil) then
 			list[key] = nil
 		end
 	end
-	
 end
 
-function inputLoop()
+local function timeout_loop()
+	frameCount = frameCount + 1	
+	callFuncList(callOnFrame[frameCount],true)
+end
+	
+
+
+local function inputLoop()
 	local inp = input.get();
 	
 	for key,value in pairs(inp) do
@@ -71,6 +74,8 @@ function inputLoop()
 	end
 end
 
+
+
 Utils = {}
 
 Utils.onButtonPress = function(id,key,func)
@@ -98,12 +103,14 @@ Utils.clearOnButtonRelease = function(id,key)
 	callOnButtonRelease[key][id] = nil
 end
 
-
 Utils.clearOnButtonHold = function(id,key)
 	callOnButtonHold[key] = callOnButtonHold[key] or {}
 	callOnButtonHold[key][id] = nil
 end
 
+Utils.isButtonHeld = function(key)
+	return input.get()[key] or false
+end
 
 Utils.setTimeout = function(id,func,time2)
 	local t = frameCount + time2;
@@ -115,7 +122,6 @@ Utils.setTimeout = function(id,func,time2)
 	end
 end
 
-
 Utils.readFile = function(filename)
 	local file = assert(io.open(filename))
 	local contents = file:read('*all')
@@ -123,46 +129,20 @@ Utils.readFile = function(filename)
 	return contents
 end
 
-Utils.decToHex = function(IN,length)
-	local B,K,OUT,I,D=16,"0123456789ABCDEF","",0
-    if(IN == 0) then
-		OUT = '0'
-	end
-	while IN>0 do
-        I=I+1
-        IN,D=math.floor(IN/B),math.mod(IN,B)+1
-        OUT=string.sub(K,D,D)..OUT
-    end
-	
+Utils.decToHex = function(val,length)
+	--a = ("%08X"):format(number)
+	local OUT = bizstring.hex(val)
 	if(length ~= nil) then
-		local padding = length - string.len(OUT);
-		while padding > 0 do
-			OUT = "0" .. OUT
-			padding = padding - 1
-		end
+		return Utils.addPadding(OUT,length,"0",true)
 	end
-	
     return OUT
 end
-Utils.decToBin = function(IN,length)
-    local B,K,OUT,I,D=2,"01","",0
-    if(IN == 0) then
-		OUT = '0'
-	end
-	while IN>0 do
-        I=I+1
-        IN,D=math.floor(IN/B),math.mod(IN,B)+1
-        OUT=string.sub(K,D,D)..OUT
-    end
-	
+
+Utils.decToBin = function(val,length)
+	local OUT = bizstring.binary(val)
 	if(length ~= nil) then
-		local padding = length - string.len(OUT);
-		while padding > 0 do
-			OUT = "0" .. OUT
-			padding = padding - 1
-		end
+		return Utils.addPadding(OUT,length,"0",true)
 	end
-	
     return OUT
 end
 
@@ -173,7 +153,9 @@ Utils.onLoop = function(id,func,interval)
 	event.onframestart(function()
 		c = c + 1
 		if(c % interval == 0) then
-			func()
+			if(not pcall(func)) then
+				Utils.onError("error with onLoop "..id)
+			end
 		end
 	end,id)
 end
@@ -182,16 +164,18 @@ Utils.clearOnLoop = function(id)
 	event.unregisterbyname(id)
 end
 
-
-Utils.onError = function(myErr)
-	console.log(myErr)
+Utils.onError = function(myErr,info)
+	if(info) then
+		console.log(myErr,info)
+	else
+		console.log(myErr)
+	end
 	console.log(debug.traceback())
 end
 
 Utils.charAt = function(str,i)
 	return string.sub(str,i,i)
 end
-
 
 Utils.getLuaDir = function()
 	return io.popen"cd":read'*l'
@@ -255,6 +239,62 @@ Utils.contains = function(list,what)
 		end
 	end
 	return false
+end
+
+Utils.displayInput = function()
+	Utils.onLoop("Utils.displayInput",function() 
+		console.log("input:",input.get())
+	end,100)
+end
+
+Utils.clearDisplayInput = function()
+	Utils.clearOnLoop("Utils.displayInput")
+end
+
+Utils.addUI = function(form,type,prop)
+	prop.height = prop.height or 25
+	prop.width = prop.width or 100
+	prop.x = prop.x or 0
+	prop.y = prop.y or 0
+	prop.text = prop.text or ""
+	prop.multiline = prop.multiline or false
+	prop.fixedWidth = prop.fixedWidth or false
+	
+	local handle
+	if(type == "label") then
+		handle = forms.label(form,prop.text,prop.x, prop.y,prop.width, prop.height,prop.fixedWidth)
+	elseif(type == "textbox") then
+		handle = forms.textbox(form,prop.text,prop.width,prop.height,prop.type,prop.x, prop.y,prop.multiline,	prop.fixedWidth)
+	elseif(type == "dropdown") then
+		handle = forms.dropdown(form,prop.items,prop.x,prop.y,prop.width, prop.height)
+	elseif(type == "checkbox") then
+		handle = forms.checkbox(form,prop.text,prop.x,prop.y)
+		if(prop.checked) then
+			Utils.setChecked(handle,true)
+		end
+	elseif(type == "button") then
+		handle = forms.button(form,prop.text,prop.onclick,prop.x,prop.y,prop.width, prop.height)
+	else
+		return Utils.onError("invalid UI type",type)
+	end
+	if(type ~= "button" and prop.onclick) then
+		forms.addclick(handle,function()
+			if(type == CST.UI.checkbox) then
+				prop.onclick(not forms.ischecked(handle))
+			else
+				prop.onclick(handle)
+			end
+		end)
+	end
+	return handle
+end
+
+Utils.setChecked = function(handle,val)
+	forms.setproperty(handle,"Checked",val)
+end
+
+Utils.addGlobalOffset = function(val)
+	return tonumber("80"..Utils.decToHex(val,6),16)
 end
 
 event.unregisterbyname('timeout_loop')

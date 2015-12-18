@@ -1,8 +1,22 @@
 Domain ROM
 SystemID N64
+001EF69C	b	u	1	RDRAM	[8]Misc.Name
 003E87D0	d	u	1	RDRAM	[12,3]Actor.List
 003FFDD4	d	f	1	RDRAM	Move.X
 003FFDD8	d	f	1	RDRAM	Move.Z
 003FFDDC	d	f	1	RDRAM	Move.Y
-
-
+003FFE14	d	f	1	RDRAM	Move.XVelocity
+003FFE18	d	f	1	RDRAM	Move.ZVelocity
+003FFE1C	d	f	1	RDRAM	Move.YVelocity
+00400880	d	f	1	RDRAM	Move.Speed
+00400884	w	s	1	RDRAM	Move.MovementAngle
+003E6B20	b	u	1	RDRAM	GlobalContext.Start
+003E6DD0	d	h	1	RDRAM	Misc.CameraActor
+003FFDB0	d	h	1	RDRAM	Misc.CameraLink
+001EF6A4	w	u	1	RDRAM	Value.MaxHp
+001EF6A6	w	u	1	RDRAM	Value.HP
+001EF6A8	b	u	1	RDRAM	Value.MagicMeterSize
+001EF6A9	b	u	1	RDRAM	Value.CurrentMagic
+001EF6AA	w	u	1	RDRAM	Value.Rupee
+001EF6B0	b	u	1	RDRAM	Value.CanUseMagic
+001F054E	w	u	1	RDRAM	Value.RupeeBank

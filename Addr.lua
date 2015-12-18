@@ -6,8 +6,9 @@ local SIZE = { bit=1/8, byte=8/8,word=16/8,double=32/8,pointer=32/8,float=32/8 }
 local TYPE = { unsigned=0,signed=1,hex=2,binary=3,fixedPoint12=4,fixedPoint20=5,fixedPoint16=6,float=7}
 Addr.SIZE = SIZE
 Addr.TYPE = TYPE
+Addr.LIST = {}
 
-function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
+Addr.new = function(address,size,type,id,sbStart,sbLength,isRom)
 	address = address % CST.GLOBAL_OFFSET
 	local self = {}
 	self.address = address
@@ -20,14 +21,14 @@ function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 	self.lastValue = 0
 	self.isRom = isRom or false
 	
-	local mem = mainmemory
+	local mem = mainmemory	--aka RAM
 	if(self.isRom) then
-		mem = memory
+		mem = memory	--aka ROM
 	end
 
 	
 	if(self.sbStart + self.sbLength > 16) then
-		return ERROR("sbStart + sbLength must be < 16")
+		return Utils.onError("sbStart + sbLength must be < 16")
 	end
 	
 	self.print = function()
@@ -37,7 +38,7 @@ function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 	self.set = function(val)
 		if(self.size == SIZE.bit) then
 			if(string.len(val) ~= self.sbLength) then
-				return ERROR("self.set string.len(val) must == SbLength",self.id)
+				return Utils.onError("self.set string.len(val) must == SbLength",self.id)
 			end
 			
 			local v = mem.read_u16_be(self.address)
@@ -67,7 +68,7 @@ function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 			if(self.type == TYPE.float) then
 				return mem.writefloat(self.address,val,true)	
 			end
-			return mem.write_u32_be(self.address,val,true)	
+			return mem.write_u32_be(self.address,val)	
 		end
 	end
 	
@@ -127,11 +128,7 @@ function Addr.new (address,size,type,id,sbStart,sbLength,isRom)
 	return self
 end
 
-function ERROR(msg,info)
-	console.log(msg,info or "")
-end
-
-function Addr.create(str)
+Addr.create = function(str)
 	local a = bizstring.split(str,"\t");
 	
 	local address = tonumber(a[1], 16)
@@ -159,13 +156,13 @@ function Addr.create(str)
 		type = TYPE.binary
 	elseif(a[3] == "1") then
 		type = TYPE.fixedPoint12
-		ERROR("unsupported type fixedPoint12",id)
+		Utils.onError("unsupported type fixedPoint12",id)
 	elseif(a[3] == "2") then
 		type = TYPE.fixedPoint20
-		ERROR("unsupported type fixedPoint20",id)
+		Utils.onError("unsupported type fixedPoint20",id)
 	elseif(a[3] == "3") then
 		type = TYPE.fixedPoint16
-		ERROR("unsupported type fixedPoint16",id)
+		Utils.onError("unsupported type fixedPoint16",id)
 	elseif(a[3] == "f") then
 		type = TYPE.float
 	end	
@@ -199,9 +196,7 @@ function Addr.create(str)
 	return Addr.LIST[id]
 end
 
-Addr.LIST = {}
-
-function Addr.getById(id)
+Addr.getById = function(id)
 	return Addr.LIST[id]
 end
 
@@ -213,7 +208,6 @@ Addr.printJSON = function(pathFile)
 	file:write(t)
 	file:close()	
 end
-
 
 Addr.array = {}
 Addr.array.new = function(address,length,sizeCell,type,isRom)
@@ -297,7 +291,7 @@ Addr.array2D.new = function(address,length,length2,sizeCell,type,isRom)
 	return self
 end
 
-function loadWch()
+local function loadWch()
 	local a = bizstring.split(Utils.readFile(WCH_PATH),"\n")
 	
 	local i = 3	--skip Domain RDRAM \n SystemID N64

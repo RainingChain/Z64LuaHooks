@@ -19,7 +19,7 @@ No setup is required. It works right out of the box.
 - Open Bizhawk and load the ROM.
 - Open the Lua Console via Tools->Lua Console
 - Open the script `main.lua`
-- Click to checkbox to apply thee mods you want.
+- Click to checkbox to apply the mods you want.
 - NOTICE: Always close the Mod Window before closing the Lua Console.
 	
 ####How to contribute:
@@ -32,6 +32,7 @@ No setup is required. It works right out of the box.
 - Check `TODO.txt`
 
 ####Mods made so far:
+- [Control Any Actors](https://youtu.be/Jbghgt4i22c)
 - [Minimap Displaying All Actors](https://youtu.be/1x5szVqoyuU)
 - [Attracts all Actors towards Link](https://www.youtube.com/watch?v=wQbrlCaYlx0)
 - [Scale Link and Actors](https://www.youtube.com/watch?v=Oczgt9Ib9KI)
@@ -71,6 +72,10 @@ No setup is required. It works right out of the box.
 		string getLuaDir()
 			Return path to folder containing "main.lua"
 		boolean contains(Object list, Any element)
+		int	addUI(Form form,CST.UI type,Object prop)
+			prop:{x,y,width,height,text,onclick,checked,multiline,fixedWidth}
+		void setChecked(checkbox,val)
+	
 	
 ######Addr
 
@@ -113,6 +118,9 @@ No setup is required. It works right out of the box.
 		int*[] getActorsByType(CST.ACTOR_TYPE type)
 		int* getActorById(number id)
 		int*[] getActors()
+		boolean isPointerActor(addr)
+			return true if addr points to an actor
+		Actor getLink()
 		
 	instance
 		CST.ACTOR_TYPE type

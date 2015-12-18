@@ -8,15 +8,13 @@ ActorModel.new(ActorModel.BASE_MODEL,function(self)
 	self.isLink = self.type == CST.ACTOR_TYPE.Link
 	
 	--based on http://wiki.cloudmodding.com/oot/Actors#Actor_Instances
-	self.collisionX = Addr.new(self.address + 0x08,SIZE.float,TYPE.float)
-	self.collisionZ = Addr.new(self.address + 0x0C,SIZE.float,TYPE.float)
-	self.collisionY = Addr.new(self.address + 0x10,SIZE.float,TYPE.float)
+	--self.collisionX = Addr.new(self.address + 0x08,SIZE.float,TYPE.float)
+	--self.collisionZ = Addr.new(self.address + 0x0C,SIZE.float,TYPE.float)
+	--self.collisionY = Addr.new(self.address + 0x10,SIZE.float,TYPE.float)
 	
-	self.initRotX = Addr.new(self.address + 0x14,SIZE.word)
-	self.initRotZ = Addr.new(self.address + 0x16,SIZE.word)
-	self.initRotY = Addr.new(self.address + 0x18,SIZE.word)
-	
-	
+	--self.initRotX = Addr.new(self.address + 0x14,SIZE.word)
+	--self.initRotZ = Addr.new(self.address + 0x16,SIZE.word)
+	--self.initRotY = Addr.new(self.address + 0x18,SIZE.word)
 	
 	self.scaleX = Addr.new(self.address + 0x50,SIZE.float,TYPE.float)
 	self.scaleZ = Addr.new(self.address + 0x54,SIZE.float,TYPE.float)
@@ -26,13 +24,11 @@ ActorModel.new(ActorModel.BASE_MODEL,function(self)
 	self.next = Addr.new(self.address + 0x124,SIZE.pointer)
 	
 	--only for damagable enemies
-	self.damageChart = Addr.new(self.address + 0x98,SIZE.double)
+	self.damageChart = Addr.new(self.address + 0x98,SIZE.pointer)
 	self.health = Addr.new(self.address + 0xAF,SIZE.byte)
 	self.damageEffect = Addr.new(self.address + 0xB1,SIZE.byte)
 end)
 
-
-	
 	
 
 ActorModel.new(CST.ACTOR_TYPE.Bomb,function(self)

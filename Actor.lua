@@ -80,7 +80,6 @@ Actor.new = function(address)
 	self.type = Addr.new(self.address,SIZE.word).get()
 	self.typeHex = Utils.decToHex(self.type,4)
 	self.typeName = CST.ACTOR_TYPE_TO_NAME[self.type] or ""
-		--or console.log("no CST.ACTOR_TYPE_TO_NAME",self.type) TEMP IMPORTANT for MM
 	ActorModel.LIST[ActorModel.BASE_MODEL](self)
 		
 	if(ActorModel.LIST[self.type]) then
@@ -150,6 +149,20 @@ Actor.getActors = function()
 		end		
 	end
 	return res	
+end
+
+Actor.isPointerActor = function(pt)
+	local list = Actor.getActors()
+	for i = 1,list.length do
+		if(list[i].address == pt) then
+			return true
+		end
+	end
+	return false
+end
+
+Actor.getLink = function()
+	return Actor.getActorByType(CST.ACTOR_TYPE.Link,{CST.ACTOR_CATEGORY.Player})
 end
 
 Actor.getById = function(id)

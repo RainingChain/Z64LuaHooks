@@ -9,3 +9,5 @@ Create new mods following examples in `/Mods`.
 	-throw boomerang that attracts everything
 
 Add Enums in Cst.lua
+
+
